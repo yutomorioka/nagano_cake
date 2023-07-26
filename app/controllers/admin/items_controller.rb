@@ -13,9 +13,9 @@ class Admin::ItemsController < ApplicationController
     @item = Item.new(item_params)
     if @item.save
       flash[:notice] ="Item was successfully created"
-      redirect_to admin_item_path(@item) # リダイレクト先変更
+      redirect_to admin_item_path(@item) 
     else
-      render "new"
+      render :new
     end
   end
   
@@ -37,14 +37,12 @@ class Admin::ItemsController < ApplicationController
       flash[:notice] ="Item was successfully updated"
       redirect_to admin_item_path(@item)
     else
-      render "show"
+      render :show
     end
   end
 
   private
-  # def if_not_admin
-  #   redirect_to root_path unless current_user.admin?
-  # end
+  
   def item_params
     params.require(:item).permit(:image,:name,:introduction,:genre_id,:price,:is_active)
   end
