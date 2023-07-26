@@ -1,0 +1,56 @@
+<main>
+  <h1>ショッピングカート</h1>
+  <%= link_to cart_items_destroy_all_path, method: :delete do %>
+	  <button class="btn btn-danger ">カートを空にする</button>
+	<% end %>
+
+	<table>
+    <thead>
+      <tr>
+        <th>商品名</th>
+        <th>単価（税込）</th>
+        <th>数量</th>
+        <th>小計</th>
+        <th></th>
+      </tr>
+    </thead>
+    <% @cart_items.each do |cart_item| %>
+      <tr>
+        <td>
+          <%= image_tag cart_item.item.get_image(50,50) %>
+          <%= cart_item.item.name %>
+        </td>
+        <td>
+          ¥<%= (cart_item.item.add_tax_price).floor.to_s(:delimited) %>
+        </td>
+        <td>　
+          <%= form_with model: cart_item, url: cart_item_path(cart_item) do |f| %>
+            <%= f.hidden_field :id, :value => cart_item.id %>
+            <%= f.select :amount, *[1..20] %> 
+            <%= f.submit "変更" %>
+          <% end %>
+        </td>
+        <td>¥<%= cart_item.subtotal %></td>
+        <td>
+          <%= link_to cart_item_path(cart_item), method: :delete do %>
+            <button class="btn btn-danger">削除</button>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <table class="table">
+    <tr>
+	    <th class="active">合計金額</th>
+	    <td>¥<%= @total.to_s(:delimited)  %></td>
+	  </tr>
+	</table>
+  <%= link_to root_path do %>
+	  <button class="btn btn-primary">買い物を続ける</button>
+	<% end %>
+  <% if current_customer.cart_items.any? %>
+	  <%= link_to new_order_path do %>
+		  <h3>情報入力に進む</h3>
+		<% end %>
+	<% end %>
+</main>

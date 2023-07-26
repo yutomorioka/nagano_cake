@@ -1,0 +1,68 @@
+<main>
+  <h2>注文情報確認</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>商品名</th>
+        <th>単価（税込）</th>
+        <th>数量</th>
+        <th>小計</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @cart_items.each do |cart_item| %>
+      <tr>
+        <td>
+          <%= image_tag cart_item.item.get_image(50,50) %>
+          <%= cart_item.item.name %>
+        </td>
+        <td>
+          <%= (cart_item.item.add_tax_price).floor.to_s(:delimited) %>
+        </td>
+        <td>
+          <%= cart_item.amount %>
+        </td>
+        <td>¥<%= cart_item.subtotal %></td>
+    <% end %>
+    </tbody>
+    </table>
+    <%= form_with model: @order do |f| %>
+    <table class="table">
+      <tbody>
+        <tr>
+          <td class="confirm-td">送料</td>
+          <td>
+            ¥<%= @order.shipping_cost.to_s(:delimited) %>円
+            <%= f.hidden_field :shipping_cost, :value => @order.shipping_cost %>
+          </td>
+        </tr>
+        <tr>
+          <td class="confirm-td">商品合計</td>
+          <td>
+            ¥<%= @total_payment.to_s(:delimited) %>円
+          </td>
+        </tr>
+        <tr>
+          <td class="confirm-td">請求金額</td>
+          <td>
+            ¥<%= (@total_payment + 800).to_s(:delimited) %>円
+            <%= f.hidden_field :total_payment, :value => (@total_payment + 800) %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  <h3>支払方法</h3>
+    <h4><%= @order.payment_method %></h4>
+      <%= f.hidden_field :payment_method, :value => @order.payment_method %></br>
+    <h3>お届け先</h3>
+      <%= @order.postal_code.to_s.insert(3, "-") %></br>
+      <%= f.hidden_field :postal_code, :value => @order.postal_code %>
+      <%= @order.address %></br>
+      <%= f.hidden_field :address, :value => @order.address %>
+      <%= @order.name %></br>
+      <%= f.hidden_field :name, :value => @order.name %>
+    <div class="text-center">
+      <%= f.submit "購入を確定する", class: "btn btn-success btn-lg text-center" %>
+    </div>
+  <% end %>
+</main>
