@@ -7,11 +7,10 @@ class Admin::GenresController < ApplicationController
   end
 
   def create
-    @genre = Genre.new(genre_params)
     @genres = Genre.all
-    unless @genre.save
-      render :index
-    end
+    @genre = Genre.new(genre_params)
+    @genre.save
+    render :index
   end
 
   def edit

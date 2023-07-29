@@ -1,11 +1,10 @@
 <div class="container">
   <div class="row">
     <h2>商品編集</h2>
-    <%= render 'item_errors', item: @item %>
     <%= form_with model:@item,url:admin_item_path,local:true do |f| %>
       <div class="col-lg-4">
-        <%= attachment_image_tag @item, :image, size:'250x250', fallback: 'no_image.jpg',size: "250x250" %>
-        <%= f.attachment_field :image %>
+        <%= f.label :商品画像 %>
+        <%= f.file_field :image %>
       </div>
       <div class="col-lg-6">
         <div class="form-group">
